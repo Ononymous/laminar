@@ -1,0 +1,23 @@
+//
+// Created by Lukas Brand on 13.05.2023.
+//
+
+#ifndef CSPOT_APPS_TS_SETTINGS_H
+#define CSPOT_APPS_TS_SETTINGS_H
+
+enum ts_serialize {
+    TS_SERIALIZE_BINARY,
+    TS_SERIALIZE_JSON
+};
+
+#define TS_STORAGE_SERIALIZE_TYPE TS_SERIALIZE_CUSTOM
+
+#define TS_STORAGE_PREFIX "lmr-type_system"
+
+#define TS_STRING_STORAGE_SIZE 1000
+#define TS_STRING_SEGMENT_SIZE 500
+
+#define TS_ARRAY_HISTORY_SIZE 100
+
+
+#endif // CSPOT_APPS_TS_SETTINGS_H

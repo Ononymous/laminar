@@ -1,0 +1,1 @@
+kill -9 `pidof multinode_regression` `pidof woofc-namespace-platform` `pidof docker`
