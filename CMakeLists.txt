@@ -1,3 +1,14 @@
+cmake_minimum_required(VERSION 3.13)
+project(laminar)
+
+set(CMAKE_CXX_STANDARD 20)
+
+find_package(woof REQUIRED)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 add_subdirectory(benchmarks)
 add_subdirectory(tests)
 add_subdirectory(logger_system)
