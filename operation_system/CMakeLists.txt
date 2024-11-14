@@ -8,4 +8,6 @@ project(
 
 #add_subdirectory(documentation)
 add_subdirectory(src)
+if(DEVICE MATCHES NO)
 add_subdirectory(test)
+endif()

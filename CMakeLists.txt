@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 project(laminar)
 
+option(DEVICE "building cspot-device" NO)
+
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(woof REQUIRED)
