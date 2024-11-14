@@ -4,7 +4,11 @@
 #ifndef CSPOT_DF_OPERATION_H
 #define CSPOT_DF_OPERATION_H
 
+#ifdef ESP8266
+#include "ts_types.h"
+#else
 #include "type_system/ts_types.h"
+#endif
 #include "df_operations.h"
 
 #ifdef __cplusplus
