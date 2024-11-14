@@ -72,7 +72,7 @@ void KSAnomaly1Hosts()
 		if (err < 0) {
 			std::cout << "Failed to read the result " << std::endl;
 		} else {
-			printf("KS: %d\n",result.operand_value.value.ts_int);
+			printf("KS: %f\n",result.operand_value.value.ts_double);
 		}
 	}
 
@@ -80,7 +80,12 @@ void KSAnomaly1Hosts()
     // std::cout << "Type: " << result.operand_value.type;
 }
 
-void KSAnomaly2Hosts() 
+#ifndef CSPOTDEVICE
+extern "C" {
+#endif
+int KSSetUpRun;
+int KSIteration;
+void KSAnomaly2HostsSetUp() 
 {
 	struct timeval tm;
 	double ts;
@@ -89,16 +94,14 @@ void KSAnomaly2Hosts()
 	int duty_cycle_count = 5;
 	int i;
 	int op_node; 
-	int iteration;
+	int ns = 1;
 
-	system("sudo rm -f lmr*");
 	laminar_init();
 	laminar_reset(); /* reset setup data structures */
-	set_host(2);
-	add_host(1, "169.231.230.191", "/devices/feather-1/");
+	set_host(1);
+	add_host(1, "169.231.230.191", "/devices/linux@169.231.230.148/");
 	add_host(2, "169.231.230.191", "/cspot-device-namespace/");
 
-	int ns = 1;
 
 	// single node computes KS test on node 2
 	add_node(ns, 2, 1, {DF_CUSTOM, KS_TEST});
@@ -119,43 +122,76 @@ void KSAnomaly2Hosts()
 	}
 
 	laminar_setup();
+	KSSetUpRun = 1;
+	KSIteration = 1;
 
-	for(iteration = 1; iteration <= 5; iteration++) 
-	{
-		if(get_curr_host_id() == 1) {
-			//gettimeofday(&tm,NULL);
-			//bench_start_time = (double)tm.tv_sec + (tm.tv_usec / 1000000.0); // sec
-			op_node = 2;
-			struct ts_value operands[duty_cycle_count];
-			for(i=0; i < duty_cycle_count; i++) {
-				set_double(&operands[i],rand()); // simulated measurement
-				operand opnd(&operands[i],iteration); // iteration count
-				printf("firing operand %d\n",op_node);
-				fire_operand(ns,op_node,&opnd); // fire the operand
-				op_node++;
-				}
 
-		}
-	       /*
-		* host 2 waits for the KS score
-		*/
-		if(get_curr_host_id() == 2) {
-			operand result;
-			int err = get_result(ns, 1, &result, iteration);
-			if (err < 0) {
-				std::cout << "Failed to read the result " << std::endl;
-			} else {
-				printf("KS: %d\n",result.operand_value.value.ts_int);
-			}
-			
-		}
-	}
+	return;
+
     // std::cout << "Size: " << std::string(result_str).size() << std::endl;
     // std::cout << "Type: " << result.operand_value.type;
 }
 
+extern void *kt_yield();
+
+void KSAnomaly2HostsBody() 
+{
+	struct timeval tm;
+	double ts;
+	double bench_start_time;
+	double bench_end_time;
+	int duty_cycle_count = 5;
+	int i;
+	int op_node; 
+	int ns = 1;
+
+	if(KSSetUpRun == 0) {
+		return;
+	}
+
+	laminar_reset();
+
+	if(get_curr_host_id() == 1) {
+		//gettimeofday(&tm,NULL);
+		//bench_start_time = (double)tm.tv_sec + (tm.tv_usec / 1000000.0); // sec
+		op_node = 2;
+		struct ts_value operands[duty_cycle_count];
+		for(i=0; i < duty_cycle_count; i++) {
+			set_double(&operands[i],rand()); // simulated measurement
+			operand opnd(&operands[i],KSIteration); // iteration count
+			printf("firing operand %d\n",op_node);
+			fflush(stdout);
+			fire_operand(ns,op_node,&opnd); // fire the operand
+			printf("operand %d fired\n",op_node);
+			fflush(stdout);
+			op_node++;
+		}
+		KSIteration++;
+	}
+       /*
+	* host 2 waits for the KS score
+	*/
+	if(get_curr_host_id() == 2) {
+		operand result;
+		int err = get_result(ns, 1, &result, KSIteration);
+		if (err < 0) {
+			std::cout << "Failed to read the result " << std::endl;
+		} else {
+			printf("KS: %f\n",result.operand_value.value.ts_double);
+		}
+		
+	}
+    // std::cout << "Size: " << std::string(result_str).size() << std::endl;
+    // std::cout << "Type: " << result.operand_value.type;
+	return;
+}
+#ifndef CSPOTDEVICE
+}
+
 int main() {
 //    KSAnomaly1Hosts();
-	KSAnomaly2Hosts();
+	KSAnomaly2HostsSetUp();
+	KSAnomaly2HostsBody();
     return 0;
 }
+#endif
