@@ -17,6 +17,9 @@
 #include "type_system/types/ts_primitive.h"
 #include "type_system/types/ts_string.h"
 
+#ifndef CSPOTDEVICE
+extern "C" {
+#endif
 void RegressAnomaly1Hosts() 
 {
 	struct timeval tm;
@@ -83,7 +86,7 @@ void RegressAnomaly1Hosts()
 		if (err < 0) {
 			std::cout << "Failed to read the result " << std::endl;
 		} else {
-			printf("REGRESS test: %d\n",result.operand_value.value.ts_int);
+			printf("REGRESS y-int: %f\n",result.operand_value.value.ts_double);
 		}
 	}
 
@@ -91,7 +94,8 @@ void RegressAnomaly1Hosts()
     // std::cout << "Type: " << result.operand_value.type;
 }
 
-void RegressAnomaly2Hosts() 
+int RegressIteration;
+void RegressAnomaly2HostsSetUp() 
 {
 	struct timeval tm;
 	double ts;
@@ -102,11 +106,10 @@ void RegressAnomaly2Hosts()
 	int op_node; 
 	int iteration;
 
-	system("sudo rm -f lmr*");
 	laminar_init();
 	laminar_reset(); /* reset setup data structures */
-	set_host(2);
-	add_host(1, "169.231.230.191", "/devices/feather-1/");
+	set_host(1);
+	add_host(1, "169.231.230.191", "/devices/linux@169.231.230.148/");
 	add_host(2, "169.231.230.191", "/cspot-device-namespace/");
 
 	int ns = 1;
@@ -131,41 +134,76 @@ void RegressAnomaly2Hosts()
 
 	laminar_setup();
 
-	for(iteration = 1; iteration <= 3; iteration++) 
-	{
-		if(get_curr_host_id() == 1) {
-			//gettimeofday(&tm,NULL);
-			//bench_start_time = (double)tm.tv_sec + (tm.tv_usec / 1000000.0); // sec
-			op_node = 2;
-			struct ts_value operands[duty_cycle_count];
-			for(i=0; i < duty_cycle_count; i++) {
-				set_double(&operands[i],rand()); // simulated measurement
-				operand opnd(&operands[i],iteration); // iteration count
-				printf("firing operand %d\n",op_node);
-				fire_operand(ns,op_node,&opnd); // fire the operand
-				op_node++;
-				}
+	RegressIteration = 1;
 
+	return;
+}
+
+double *data;
+void RegressAnomaly2HostsBody() 
+{
+	struct timeval tm;
+	double ts;
+	double bench_start_time;
+	double bench_end_time;
+	int duty_cycle_count = 5;
+	int i;
+	int op_node; 
+	double dval;
+
+	int ns = 1;
+
+	if(get_curr_host_id() == 1) {
+
+		if(RegressIteration > 3) {
+			return;
 		}
-	       /*
-		* host 2 waits for the KS score
-		*/
-		if(get_curr_host_id() == 2) {
-			operand result;
-			int err = get_result(ns, 1, &result, iteration);
-			if (err < 0) {
-				std::cout << "Failed to read the result " << std::endl;
-			} else {
-				printf("REGRESS test: %d\n",result.operand_value.value.ts_int);
+		if(RegressIteration == 1) {
+			data = (double *)malloc(duty_cycle_count * sizeof(double));
+			if(data == NULL) {
+				exit(1);
 			}
-			
+			for(i=0; i < duty_cycle_count; i++) {
+				data[i] = rand();
+			}
 		}
+		//gettimeofday(&tm,NULL);
+		//bench_start_time = (double)tm.tv_sec + (tm.tv_usec / 1000000.0); // sec
+		op_node = 2;
+		struct ts_value operands[duty_cycle_count];
+		for(i=0; i < duty_cycle_count; i++) {
+			dval = data[i] * RegressIteration;
+			set_double(&operands[i],dval); // simulated measurement
+			operand opnd(&operands[i],RegressIteration); // iteration count
+			printf("firing operand %d, iter: %d, value: %f\n",
+						op_node, RegressIteration, dval);
+			fire_operand(ns,op_node,&opnd); // fire the operand
+			op_node++;
+		}
+		RegressIteration++;
+	}
+       /*
+	* host 2 waits for the KS score
+	*/
+	if(get_curr_host_id() == 2) {
+		operand result;
+		int err = get_result(ns, 1, &result, RegressIteration);
+		if (err < 0) {
+			std::cout << "Failed to read the result " << std::endl;
+		} else {
+			printf("REGRESS y-int: %f\n",result.operand_value.value.ts_double);
+		}
+		
 	}
     // std::cout << "Size: " << std::string(result_str).size() << std::endl;
     // std::cout << "Type: " << result.operand_value.type;
 }
+#ifndef CSPOTDEVICE
+} // extern C
 
 int main() {
-	RegressAnomaly2Hosts();
+	RegressAnomaly2HostsSetUp();
+	RegressAnomaly2HostsBody();
     return 0;
 }
+#endif
