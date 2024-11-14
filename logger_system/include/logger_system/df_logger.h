@@ -2,6 +2,25 @@
 // Created by Lukas Brand on 03.01.2023.
 //
 
+#ifdef ESP8266
+
+#ifndef DF_LOGGER_H
+#define DF_LOGGER_H
+
+#define log_error printf
+#define log_debug(...)
+//#define log_debug printf
+#define log_info(...)
+#define log_info_with_value(...)
+#define log_debug_with_value(...)
+#define log_error_with_value(...)
+#define log_init(...)
+
+#endif
+
+
+#else
+
 #ifndef CSPOT_DFDEBUG_H
 #define CSPOT_DFDEBUG_H
 
@@ -37,3 +56,5 @@ void log_error_with_value(const char* message, const struct ts_value* value, ...
 #endif
 
 #endif // CSPOT_DFDEBUG_H
+
+#endif // ESP8266
