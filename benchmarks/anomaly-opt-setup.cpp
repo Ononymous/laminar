@@ -62,7 +62,7 @@ void AnomalyOptSetUp()
 	laminar_reset();
 	seqno = WooFGetLatestSeqno("ANOMALY-OPT.state");
 	if((seqno == -1) || (seqno == 0)) {
-		err = WooFCreate("ANOMALY-OPT.state",8*sizeof(int),2);
+		err = WooFCreate("ANOMALY-OPT.state",sizeof(int),2);
 		if(err < 0) {
 			printf("anomaly-test-setup: could not create state woof\n");
 			exit(1);

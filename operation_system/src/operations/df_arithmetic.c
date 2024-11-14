@@ -3,8 +3,12 @@
 //
 #include "df_arithmetic.h"
 
+#ifdef ESP8266
+#include "ts_type.h"
+#else
 #include "logger_system/df_operation_logger.h"
 #include "type_system/ts_type.h"
+#endif
 
 #include <math.h>
 #include <stdlib.h>

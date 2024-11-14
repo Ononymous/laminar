@@ -14,7 +14,9 @@
 #include "type_system/ts_type.h"
 #include "type_system/types/ts_primitive.h"
 
+#ifndef CSPOTDEVICE
 extern "C" {
+#endif
 
 int AnomalyIteration;
 int AnomalyCycle;
@@ -147,8 +149,11 @@ void Anomaly2HostsBody()
     // std::cout << "Size: " << std::string(result_str).size() << std::endl;
     // std::cout << "Type: " << result.operand_value.type;
 }
+#ifndef CSPOTDEVICE
 } // extern C
-//int main() {
-//	RegressAnomaly2Hosts();
-//    return 0;
-//}
+int main() {
+	Anomaly2HostsSetUp();
+	Anomaly2HostsBody();
+    return 0;
+}
+#endif

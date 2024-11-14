@@ -5,8 +5,13 @@
 #ifndef CSPOT_DF_CUSTOM_OPERATIONS_H
 #define CSPOT_DF_CUSTOM_OPERATIONS_H
 
+#ifdef ESP8266
+#include "df_operations.h"
+#include "ts_types.h"
+#else
 #include "operation_system/df_operations.h"
 #include "type_system/ts_types.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
