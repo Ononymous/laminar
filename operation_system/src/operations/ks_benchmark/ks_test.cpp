@@ -380,16 +380,16 @@ double KS(void *s1, int f1, void *s2, int f2)
 		return(-1.0);
 	}
 
+#if 0
 	err = CompressCDF(tcdf,tsize,&cdf1,&size1);
 	if(err <= 0) {
 		fprintf(stderr,"KS: couldn't compress cdf for s1\n");
 		fflush(stderr);
 		return(-1.0);
 	}
-#if 0
-cdf1 = tcdf;
-size1 = tsize;
 #endif
+	cdf1 = tcdf;
+	size1 = tsize;
 
 	err = MakeCDF_LE(s2,f2,&tcdf,&tsize);
 	if(err <= 0) {
@@ -398,16 +398,16 @@ size1 = tsize;
 		free(cdf1);
 		return(-1.0);
 	}
+#if 0
 	err = CompressCDF(tcdf,tsize,&cdf2,&size2);
 	if(err <= 0) {
 		fprintf(stderr,"KS: couldn't compress cdf for s2\n");
 		fflush(stderr);
 		return(-1.0);
 	}
-#if 0
-cdf2 = tcdf;
-size2 = tsize;
 #endif
+	cdf2 = tcdf;
+	size2 = tsize;
 
 	value1 = cdf1[i*0+0];
 	value2 = cdf2[i*0+0];

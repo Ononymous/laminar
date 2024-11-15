@@ -62,7 +62,7 @@ int regress_test_node(const struct ts_value* const* operands,
 		for(i=0; i < operand_count; i++) {
 			dval = operands[i]->value.ts_double;
 			s = woof_put(history_woof,"",&dval);
-printf("init x: %f at seqno %lu\n",dval,s);
+//printf("init x: %f at seqno %lu\n",dval,s);
 		}
 		result->value.ts_int = 0;
 		return 1;
@@ -118,7 +118,7 @@ printf("init x: %f at seqno %lu\n",dval,s);
 	}
 
 	for(i=0; i < operand_count; i++) {
-printf("x[%d]: %f y[%d]: %f\n",i,x->data[i*2+1],i,y->data[i]);
+//printf("x[%d]: %f y[%d]: %f\n",i,x->data[i*2+1],i,y->data[i]);
 	}
 	/*
 	 * generate coefficients
@@ -189,7 +189,7 @@ printf("REGRESS: return 1, slope: %f, low: %f, high: %f y_int: %f low: %f high: 
 		woof_put(history_woof,"",&dval);
 	}
 
-	printf("REGRESS: found %f %f %d (old: %f %f)\n",
+//	printf("REGRESS: found %f %f %d (old: %f %f)\n",
 			ival,rval,test_val,rc.y_int,rc.slope);
 	/*
 	 * store off this intercept and slope for next time

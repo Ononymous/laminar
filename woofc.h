@@ -4,10 +4,12 @@
 extern "C" {
 #endif
 
+#ifndef ESP8266
 typedef struct woof_stc WOOF;
 
 int WooFInit();
 void WooFExit();
+#endif
 
 int WooFCreate(const char* name, unsigned long element_size, unsigned long history_size);
 
@@ -20,14 +22,16 @@ unsigned long WooFGetLatestSeqnoWithCause(const char* wf_name,
                                           unsigned long long cause_seq_no,
                                           const char* cause_woof_name,
                                           unsigned long cause_woof_latest_seq_no);
+int WooFInvalid(unsigned long seq_no);
 
+#ifndef ESP8266
 unsigned long WooFGetNameID();
 
-int WooFInvalid(unsigned long seq_no);
 
 int WooFValidURI(const char* str);
 
 int WooFLocalIP(char* ip_str, int len);
+#endif
 
 #define WOOFNAMESIZE (256)
 unsigned long WooFGetElSize(WOOF* wf, const char* wf_name);
