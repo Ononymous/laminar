@@ -4,15 +4,16 @@
 #ifdef ESP8266
 #include "ts_type.h"
 #include "ts_settings.h"
+#include "woofc.h"
 #else
 #include "type_system/ts_type.h"
 #include "type_system/ts_settings.h"
+#include <uuid/uuid.h>
+#include <woofc.h>
 #endif
 
 #include <stdlib.h>
 #include <string.h>
-#include <uuid/uuid.h>
-#include <woofc.h>
 
 #define UUID_STR_LEN 37
 

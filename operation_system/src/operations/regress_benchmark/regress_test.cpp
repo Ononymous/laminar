@@ -190,7 +190,7 @@ printf("REGRESS: return 1, slope: %f, low: %f, high: %f y_int: %f low: %f high: 
 	}
 
 //	printf("REGRESS: found %f %f %d (old: %f %f)\n",
-			ival,rval,test_val,rc.y_int,rc.slope);
+//			ival,rval,test_val,rc.y_int,rc.slope);
 	/*
 	 * store off this intercept and slope for next time
 	 */

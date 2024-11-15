@@ -80,19 +80,25 @@ int df_arithmetic_operation_with_type(const enum df_arithmetic_ops arithmetic_op
             return compute_modulo(operands, operand_count, result_type, result_value);
         case DF_ARITH_SQRT: {
             if (operand_count != 1) {
+#ifndef ESP8266
                 log_operand_count_mismatch(1, operand_count);
+#endif
                 return 0;
             }
             return compute_sqrt(operands[0], result_type, result_value);
         }
         case DF_ARITH_ABS:
             if (operand_count != 1) {
+#ifndef ESP8266
                 log_operand_count_mismatch(1, operand_count);
+#endif
                 return 0;
             }
             return compute_abs(operands[0], result_type, result_value);
         default:
+#ifndef ESP8266
             log_operation_not_existing("ARITHMETIC", arithmetic_operation);
+#endif
             return 0;
     }
 }
@@ -472,11 +478,15 @@ static int compatible_types(const struct ts_value* const* operands,
     for (unsigned int i = 0; i < operand_count; i++) {
         const enum ts_types current_type = operands[i]->type;
         if (!is_number(operands[i])) {
+#ifndef ESP8266
             log_not_a_number(current_type);
+#endif
             return 0;
         }
         if (current_type != result_type) {
+#ifndef ESP8266
             log_type_mismatch(result_type, current_type);
+#endif
             return 0;
         }
     }

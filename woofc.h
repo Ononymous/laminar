@@ -31,12 +31,14 @@ unsigned long WooFGetNameID();
 int WooFValidURI(const char* str);
 
 int WooFLocalIP(char* ip_str, int len);
+unsigned long WooFGetElSize(WOOF* wf, const char* wf_name);
+const char* WoofGetFileName(WOOF* wf);
+#else
+unsigned long WooFGetElSize(char* wf, const char* wf_name);
+const char* WoofGetFileName(char* wf);
 #endif
 
 #define WOOFNAMESIZE (256)
-unsigned long WooFGetElSize(WOOF* wf, const char* wf_name);
-
-const char* WoofGetFileName(WOOF* wf);
 #define WooFGetFileName WoofGetFileName
 
 

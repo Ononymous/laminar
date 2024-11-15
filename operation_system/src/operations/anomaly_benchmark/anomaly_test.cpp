@@ -1,8 +1,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#ifdef ESP8266
+#include "df_interface.h"
+#include "ts_primitive.h"
+#else
 #include "../../../df_interface.h"
 #include "type_system/types/ts_primitive.h"
+#endif
 #include "anomaly_test.h"
 
 int anomaly_test_node(const struct ts_value* const* operands,
