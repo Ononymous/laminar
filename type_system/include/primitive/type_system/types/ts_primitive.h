@@ -9,7 +9,11 @@
 extern "C" {
 #endif
 
+#ifdef ESP8266
+#include "ts_types.h"
+#else
 #include "type_system/ts_types.h"
+#endif
 
 void set_boolean(struct ts_value* value, bool b);
 void set_byte(struct ts_value* value, int8_t b);

@@ -1,7 +1,11 @@
 //
 // Created by Lukas Brand on 24.01.2023.
 //
+#ifdef ESP8266
+#include "ts_primitive.h"
+#else
 #include "type_system/types/ts_primitive.h"
+#endif
 
 #include <stdlib.h>
 #include <string.h>

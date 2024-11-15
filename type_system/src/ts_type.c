@@ -1,9 +1,13 @@
 //
 // Created by Lukas Brand on 24.01.2023.
 //
+#ifdef ESP8266
+#include "ts_type.h"
+#include "ts_settings.h"
+#else
 #include "type_system/ts_type.h"
-
 #include "type_system/ts_settings.h"
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -14,10 +18,12 @@
 
 #define STRING_NULL_CHARACTER_SIZE 1
 
+#ifndef ESP8266
 struct ts_string_partial {
     char partial_string[TS_STRING_SEGMENT_SIZE];
     unsigned long next_partial_sequence_id;
 };
+#endif
 
 bool woof_exists(const char* woof_id) {
     if (WooFInvalid(WooFGetLatestSeqno(woof_id))) {
@@ -96,6 +102,7 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value) {
                 return NULL;
             }
         } break;
+#ifndef ESP8266
         case TS_STRING: {
             return_value->value.ts_string = unloaded_value->value.ts_string;
             if (!load_string_value(&return_value->value.ts_string)) {
@@ -110,6 +117,7 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value) {
                 return NULL;
             }
         } break;
+#endif
         default: {
             free(return_value);
             return NULL;
@@ -118,6 +126,7 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value) {
     return return_value;
 }
 
+#ifndef ESP8266
 bool load_string_value(struct ts_value_string* const string) {
     char woof_id[100];
     strcpy(woof_id, TS_STORAGE_PREFIX);
@@ -251,6 +260,7 @@ bool load_array_value(struct ts_value_array* const array) { // NOLINT(misc-no-re
 
 bool write_string_value(struct ts_value_string* string);
 bool write_array_value(struct ts_value_array* array);
+#endif
 
 bool write_value(struct ts_value* const value) {
     switch (value->type) {
@@ -273,15 +283,18 @@ bool write_value(struct ts_value* const value) {
         case TS_TIMESTAMP:
             // primitives do not need separate WooFs
             return true;
+#ifndef ESP8266
         case TS_STRING:
             return write_string_value(&value->value.ts_string);
         case TS_ARRAY:
             return write_array_value(&value->value.ts_array);
+#endif
         default:
             return false;
     }
 }
 
+#ifndef ESP8266
 bool write_string_value(struct ts_value_string* const string) {
     char woof_id[100];
     strcpy(woof_id, TS_STORAGE_PREFIX);
@@ -417,3 +430,4 @@ bool write_array_value(struct ts_value_array* const array) { // NOLINT(misc-no-r
     array->value = NULL;
     return true;
 }
+#endif

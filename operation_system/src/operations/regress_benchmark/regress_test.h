@@ -1,8 +1,13 @@
 #ifndef REGRESS_TEST_H
 #define REGRESS_TEST_H
 
+#ifdef ESP8266
+#include "df_interface.h"
+#include "ts_type.h"
+#else
 #include "../../../../df_interface.h"
 #include "type_system/ts_type.h"
+#endif
 
 #include <functional>
 #include <string>
