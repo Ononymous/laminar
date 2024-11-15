@@ -1,6 +1,12 @@
 
 #include "df_custom_operations.h"
 
+#ifdef ESP8266
+#include "ks_test.h"
+#include "regress_test.h"
+#include "corr_test.h"
+#include "anomaly_test.h"
+#else
 #include "logger_system/df_operation_logger.h"
 #include "type_system/types/ts_matrix.h"
 #include "riot_benchmark/riot.h"
@@ -9,9 +15,11 @@
 #include "regress_benchmark/regress_test.h"
 #include "corr_benchmark/corr_test.h"
 #include "anomaly_benchmark/anomaly_test.h"
+#endif
 
 #include <chrono>
 
+#ifndef ESP8266
 int compute_sum_of_squares(const struct ts_value* const* operands,
                            const unsigned int operand_count,
                            const enum ts_types result_type,
@@ -136,6 +144,8 @@ int matrix_multiply_timing(const struct ts_value* const* operands,
     return true;
 }
 
+#endif // ESP8266
+
 int df_custom_operation(const enum df_custom_ops custom_operation,
                         const struct ts_value* const* operands,
                         const unsigned int operand_count,
@@ -147,6 +157,7 @@ int df_custom_operation(const enum df_custom_ops custom_operation,
     *result = result_value;
 
     switch (custom_operation) {
+#ifndef ESP8266
         case SUM_OF_SQUARES:
             return compute_sum_of_squares(operands, operand_count, result_type, result_value);
 
@@ -229,6 +240,7 @@ int df_custom_operation(const enum df_custom_ops custom_operation,
             return setup_plot_node(operands, operand_count, operation_metadata, result_type, result_value);
         case RIOT_SINK:
             return sink_node(operands, operand_count, operation_metadata, result_type, result_value);
+#endif // ESP8266
 
 	case KS_TEST:
             return ks_test_node(operands, operand_count, operation_metadata, result_type, result_value);
@@ -245,7 +257,12 @@ int df_custom_operation(const enum df_custom_ops custom_operation,
 	case ANOMALY_OPT_SNK:
             return anomaly_optsnk_node(operands, operand_count, operation_metadata, result_type, result_value);
         default:
+#ifndef ESP8266
             log_operation_not_existing("CUSTOM_OPERATION", custom_operation);
+#else
+            printf("CUSTOM_OPERATION %d not recognized\n",(int)custom_operation);
+#endif
+
             return 0;
     }
 }

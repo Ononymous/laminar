@@ -1,11 +1,16 @@
 //
 // Created by Lukas Brand on 30.03.23.
 //
+#ifdef ESP8266
+#include "ts_types.h"
+#include <stdlib.h>
+#include <string.h>
+#else
 #include "type_system/ts_types.h"
-
 #include <stdlib.h>
 #include <string.h>
 #include <uuid/uuid.h>
+#endif
 
 char* value_type_as_string(enum ts_types type) {
     char* string;
@@ -50,6 +55,7 @@ char* value_type_as_string(enum ts_types type) {
 	case TS_PRIM_STRING:
 	    temp_string = "TS_PRIM_STRING";
 	    break;
+#ifndef ESP8266
         case TS_PRIM_LARGE_STRING:
         temp_string = "TS_PRIM_LARGE_STRING";
         break;
@@ -74,6 +80,7 @@ char* value_type_as_string(enum ts_types type) {
         case TS_RECORD:
             temp_string = "TS_RECORD";
             break;
+#endif
         default:
             temp_string = "TS_UNRECOGNIZED TYPE";
     }
@@ -82,6 +89,7 @@ char* value_type_as_string(enum ts_types type) {
     return string;
 }
 
+#ifndef ESP8266
 char* prim_double_array_as_string(const double (*data)[TS_PRIM_DOUBLE_ARRAY_SIZE]) {
     char* array_value_string;
     int array_value_string_size = 0;
@@ -1238,6 +1246,8 @@ char* value_as_string(const struct ts_value* value) {
     return value_string;
 }
 
+#endif
+
 bool value_deep_set(const struct ts_value* source, struct ts_value* destination) {
     if (destination == NULL) {
         return false;
@@ -1286,6 +1296,7 @@ bool value_deep_set(const struct ts_value* source, struct ts_value* destination)
                 destination->value.ts_prim_double_array[i] = source->value.ts_prim_double_array[i];
             }
             break;
+#ifndef ESP8266
         case TS_STRING:
             destination->value.ts_string = source->value.ts_string;
             // set_string(destination, value_to_string(source));
@@ -1302,6 +1313,7 @@ bool value_deep_set(const struct ts_value* source, struct ts_value* destination)
         case TS_RECORD:
             destination->value.ts_record = source->value.ts_record;
             break;
+#endif
         default:
             return false;
     }
@@ -1345,6 +1357,7 @@ struct ts_value* value_deep_copy(const struct ts_value* const source) {
         case TS_PRIM_STRING:
 	    strncpy(destination->value.ts_prim_string,source->value.ts_prim_string,sizeof(destination->value.ts_prim_string));
             break;
+#ifndef ESP8266
         case TS_PRIM_LARGE_STRING:
             strncpy(destination->value.ts_prim_large_string,source->value.ts_prim_large_string,sizeof(destination->value.ts_prim_large_string));
             break;
@@ -1370,6 +1383,7 @@ struct ts_value* value_deep_copy(const struct ts_value* const source) {
 
             deep_copy_array(source_array_value, destination_array_value);
         } break;
+#endif
         default:
             return NULL;
     }
@@ -1377,6 +1391,7 @@ struct ts_value* value_deep_copy(const struct ts_value* const source) {
 }
 
 
+#ifndef ESP8266
 void deep_copy_array(const struct ts_value_array* const source_array_value, // NOLINT(misc-no-recursion)
                      struct ts_value_array* const destination_array_value) {
     struct ts_storage_system destination_storage_system;
@@ -1463,8 +1478,10 @@ void deep_copy_array(const struct ts_value_array* const source_array_value, // N
             break;
     }
 }
+#endif
 
 bool value_deep_delete(struct ts_value* value) {
+#ifndef ESP8266
     switch (value->type) {
         case TS_STRING:
             // free(value->value.ts_string.value);
@@ -1486,6 +1503,7 @@ bool value_deep_delete(struct ts_value* value) {
         default:
             break;
     }
+#endif
     free(value);
     return 1;
 }

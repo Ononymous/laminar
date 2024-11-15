@@ -1,20 +1,30 @@
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#endif
 #include "df_interface.h"
 
 #include "df.h"
 
 #include <chrono>
-#include <cmath>
 #include <iostream>
 #include <sys/wait.h>
 #include <thread>
 #include <unistd.h>
 #include <vector>
 
+#ifdef ESP8266
+#define OUTPUT_WOOF_SIZE 10
+#define SUBSCRIPTION_EVENTS_WOOF_SIZE 10
+#define SUBSCRIPTION_EVENTS_SNC_WOOF_SIZE 10
+#define NODE_STATE_WOOF_SIZE 10
+#define SUBSCRIPTION_POS_WOOF_SIZE 10
+#else
 #define OUTPUT_WOOF_SIZE 3000
 #define SUBSCRIPTION_EVENTS_WOOF_SIZE 3000
 #define SUBSCRIPTION_EVENTS_SNC_WOOF_SIZE 16
 #define NODE_STATE_WOOF_SIZE 3000
 #define SUBSCRIPTION_POS_WOOF_SIZE 3000
+#endif
 
 // {namspace --> entries}
 std::map<int, int> subscribe_entries;
@@ -57,16 +67,25 @@ void retry_sleep(enum RetryType retry_type, int retry_itr) {
     if (retry_type == RETRY_IMMEDIATE) {
         return;
     } else if (retry_type == RETRY_INTERVAL) {
+#ifdef ESP8266
+	delay(10000);
+#else
         std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+#endif
     } else if (retry_type == RETRY_LINEAR_BACKOFF) {
         int ms = std::min((retry_itr)*2000, 32000);
+#ifdef ESP8266
+	delay(ms);
+#else
         std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+#endif
     } else if (retry_type == RETRY_EXPONENTIAL_BACKOFF) {
         int ms = std::min((int(pow(2, retry_itr)) * 1000) + (rand() % 100), 32000);
+#ifdef ESP8266
+	delay(ms);
+#else
         std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-    } else if (retry_type == RETRY_LOG_BACKOFF) {
-        int ms = std::min(int(log10(retry_itr + 1) * 16000), 32000);
-        std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+#endif
     }
 }
 
@@ -165,7 +184,9 @@ int get_ns_from_woof_path(const std::string& woof_path) {
 }
 
 void laminar_init() {
+#ifndef ESP8266
     WooFInit();
+#endif
 
     std::string setup_state_woof = generate_woof_path(SETUP_ST_WF_TYPE);
     // check if setup state exists; if not then create it and set state as STARTED
@@ -181,7 +202,9 @@ void laminar_init() {
 
 
 void woof_create(const std::string& name, const unsigned long element_size, const unsigned long history_size) {
+#ifndef ESP8266
     WooFInit();
+#endif
     const int err = WooFCreate(name.c_str(), element_size, history_size);
     if (err < 0) {
         std::cerr << "ERROR -- creation of " << name << " failed\n";

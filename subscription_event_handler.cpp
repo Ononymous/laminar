@@ -1,8 +1,14 @@
 #include "df.h"
 #include "df_interface.h"
+#ifndef ESP8266
 #include "logger_system/df_logger.h"
 #include "operation_system/df_operation.h"
 #include "type_system/ts_type.h"
+#else
+#include "df_logger.h"
+#include "df_operation.h"
+#include "ts_type.h"
+#endif
 
 #include <iostream>
 #include <string>
@@ -11,12 +17,6 @@
 #ifdef DF_TIMING
 #include <chrono>
 #endif // DF_TIMING
-
-/*
-* 0 => infinite retries
-* n > 0 => n retries
-*/
-#define MAX_RETRIES 0
 
 operand perform_operation(const std::vector<operand>& operands,
                           const struct df_operation operation,
@@ -29,7 +29,9 @@ operand perform_operation(const std::vector<operand>& operands,
         const_operands_array[i] = operands_array[i];
         if (const_operands_array[i] == nullptr) {
             log_error("Could not load value [input:%lu]", i);
+#ifndef ESP8266
             throw std::runtime_error("loading of input failed");
+#endif
         }
         log_debug_with_value("[input:%lu] Loaded value:", const_operands_array[i], i);
     }
@@ -47,7 +49,7 @@ operand perform_operation(const std::vector<operand>& operands,
     }
 
     operand result(result_value, operation_metadata->flow_control.execution_iteration);
-    // value_deep_delete(result_value);
+    value_deep_delete(result_value);
     
 #ifdef DF_TIMING
     const auto now = std::chrono::high_resolution_clock::now();
@@ -65,6 +67,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
 #endif
     log_init("DF-S", true);
     log_debug("START: Subscription handler");
+//printf("subscription handler started\n");
 
     int err;
     int max_retries = 10;
@@ -212,7 +215,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
     // if the subscription_sequence_number is invalid, retry to get valid sequence number
         int retry_itr = 1;
         while(WooFInvalid((unsigned long)subscription_sequence_number) &&
-            (retry_itr != MAX_RETRIES)) {
+            (retry_itr < max_retries)) {
             subscription_sequence_number = (unsigned long long)woof_last_seq(subscription_output_woof);
             log_debug("[input:%lu] Retrying to get the subscription seq number. Unable to reach output woof : %s", 
                         input_index,
@@ -220,11 +223,11 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
             retry_sleep(retry_type, retry_itr);
             retry_itr++;
         }
-    if(retry_itr == MAX_RETRIES) {
+    if(retry_itr == max_retries) {
         log_error("[input:%lu] Giving up on last seqno for output woof %s after %d retries\n",
                 input_index,
                 subscription_output_woof.c_str(),
-                MAX_RETRIES);
+                max_retries);
         return(-1);
     }
 
@@ -261,7 +264,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
                                 retry_itr);
                     retry_sleep(retry_type, retry_itr);
                     retry_itr++;
-            if(retry_itr == MAX_RETRIES) {
+            if(retry_itr == max_retries) {
                 log_error("Subscription handler: Max retries reading output woof: %s itr: %d, END\n",
                                 subscription_output_woof.c_str(), 
                                 retry_itr);
@@ -297,7 +300,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
                                     retry_itr);
                         retry_sleep(retry_type, retry_itr);
                         retry_itr++;
-            if(retry_itr == MAX_RETRIES) {
+            if(retry_itr == max_retries) {
                             log_error("Giving up on reading output woof: %s at seqno %lu after %d retries", 
                         subscription_output_woof.c_str(),j, max_retries);
                 return(-1);
@@ -384,6 +387,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
     }
 
     // still could race -- double check with a log scan
+#ifndef ESP8266
     int host_id = get_curr_host_id();
     const std::string node_snc_woof = generate_woof_path(NODE_SNC_WF_TYPE, node_namespace, node_id, host_id);
     unsigned long long snc_seqno;
@@ -410,6 +414,7 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
         err = woof_get(node_snc_woof,&other_event,snc_seqno);
     }
 
+#endif
     /* Fire node */
 
     log_debug("Firing node");
@@ -485,3 +490,9 @@ extern "C" int subscription_event_handler(WOOF* wf, unsigned long seqno, void* p
 
     return 0;
 }
+
+#ifdef ESP8266
+extern "C" int Subscription_event_handler(char* wf, unsigned long seqno, void* ptr) {
+        return(subscription_event_handler(wf,seqno,ptr));
+}
+#endif

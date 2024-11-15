@@ -43,8 +43,13 @@ extern "C" int output_handler(WOOF* wf, unsigned long seqno, void* ptr) {
         operand prev;
         const int prev_err = woof_get(woof_name, &prev, seqno - 1);
         if (prev_err < 0) {
+#ifdef ESP8266
+            log_debug("Error reading output woof: %s", woof_name.c_str());
+            log_debug("EXIT: Output handler");
+#else
             log_error("Error reading output woof: %s", woof_name.c_str());
             log_error("EXIT: Output handler");
+#endif
             return prev_err;
         }
 
@@ -72,8 +77,13 @@ printf("EXIT: Output handler\n");
     unsigned long start_idx;
     const int start_idx_err = woof_get(submap_woof, &start_idx, node_id);
     if (start_idx_err < 0) {
+#ifdef ESP8266
+        log_debug("Error reading submap woof (start): %s", submap_woof.c_str());
+        log_debug("EXIT: Output handler");
+#else
         log_error("Error reading submap woof (start): %s", submap_woof.c_str());
         log_error("EXIT: Output handler");
+#endif
         return start_idx_err;
     }
 
@@ -83,8 +93,13 @@ printf("EXIT: Output handler\n");
     } else {
         const int end_idx_err = woof_get(submap_woof, &end_idx, node_id + 1);
         if (end_idx_err < 0) {
+#ifdef ESP8266
+            log_debug("Error reading submap woof (end): %s", submap_woof.c_str());
+            log_debug("EXIT: Output handler");
+#else
             log_error("Error reading submap woof (end): %s", submap_woof.c_str());
             log_error("EXIT: Output handler");
+#endif
             return end_idx_err;
         }
     }
@@ -96,8 +111,13 @@ printf("EXIT: Output handler\n");
         subscriber sub;
         const int sub_error = woof_get(subdata_woof, &sub, i);
         if (sub_error < 0) {
+#ifdef ESP8266
+            log_debug("Error reading subdata woof: %s", submap_woof.c_str());
+            log_debug("EXIT: Output handler");
+#else
             log_error("Error reading subdata woof: %s", submap_woof.c_str());
             log_error("EXIT: Output handler");
+#endif
             return sub_error;
         }
 
