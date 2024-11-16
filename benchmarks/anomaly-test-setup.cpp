@@ -73,7 +73,7 @@ void Anomaly2HostsSetUp()
 		return;
 	}
 
-	set_host(2);
+	set_host(1);
 //	add_host(1, "169.231.230.148", "/cspot-device-namespace/");
 	add_host(1, "169.231.230.191", "/devices/feather-1/");
 //	add_host(1, "169.231.230.191", "/devices/linux@169.231.230.148/");
@@ -87,9 +87,9 @@ void Anomaly2HostsSetUp()
 	// two node computes REGRESS test on node 2
 	// two node computes CORR test on node 2
 	// two node computes ANOMALY test on node 2
-	add_node(ns, 1, 1, {DF_CUSTOM, KS_TEST});
-	add_node(ns, 1, 2, {DF_CUSTOM, REGRESS_TEST});
-	add_node(ns, 1, 3, {DF_CUSTOM, CORR_TEST});
+	add_node(ns, 2, 1, {DF_CUSTOM, KS_TEST});
+	add_node(ns, 2, 2, {DF_CUSTOM, REGRESS_TEST});
+	add_node(ns, 2, 3, {DF_CUSTOM, CORR_TEST});
 	add_node(ns, 2, 4, {DF_CUSTOM, ANOMALY_TEST});
 
 

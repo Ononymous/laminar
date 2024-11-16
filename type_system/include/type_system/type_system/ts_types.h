@@ -155,6 +155,7 @@ union ts_values {
 struct ts_value {
     enum ts_types type;
     union ts_values value;
+    uint64_t pad;
 };
 
 #define TS_VALUE_SIZE sizeof(struct ts_value)
