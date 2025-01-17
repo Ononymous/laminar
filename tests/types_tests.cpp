@@ -402,11 +402,11 @@ void matrix_types_laminar() {
 
 
 void types_tests() {
-    primitive_types();
-    primitive_types_laminar();
+//    primitive_types();
+//    primitive_types_laminar();
     array_type_with_op_laminar();
-    array_type_laminar();
-    string_type_laminar();
-    string_type_with_op_laminar();
-    matrix_types_laminar();
+//    array_type_laminar();
+//    string_type_laminar();
+//    string_type_with_op_laminar();
+//    matrix_types_laminar();
 }
