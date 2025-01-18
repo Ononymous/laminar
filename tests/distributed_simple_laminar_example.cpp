@@ -15,13 +15,13 @@
 //  c
 
 int main() {
-    int ns = 1; // Namespace
+    int ns = 1; // Laminar Namespace (not CSPOT's)
 
     laminar_init();
 
-    // Set up single device on localhost
-    set_host(2);
+    // Set up two devices (change IPs and/or cspot namespaces)
     int curr_host_id = 2;
+    set_host(curr_host_id);
     add_host(1, "169.231.230.183", "/cspot-device-namespace/");
     add_host(2, "169.231.230.225", "/cspot-device-namespace/");
 

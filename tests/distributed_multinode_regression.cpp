@@ -167,15 +167,13 @@ void online_linreg_multinode() {
     subscribe("5:2:1", "3:2");   // result = 0 or ____?
     subscribe("5:2:2", "2:11");  // result = 0 or slope?
 
-    // std::cout << graphviz_representation();
-    // return;
-
     laminar_setup();
+    // std::cout << graphviz_representation() << std::endl;
+    // return;
 
     // Initialization
     int curr_host_id = get_curr_host_id();
     int iters = 100;
-
 
     if (curr_host_id == 1) {
         std::cout << "Initializing constants" << std::endl;
