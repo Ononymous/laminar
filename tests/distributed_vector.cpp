@@ -15,8 +15,8 @@ int main() {
     system("sudo find . -name \"lmr*\" -delete");
     laminar_reset(); /* reset setup data structures */
 
-    set_host(1);
-    int curr_host_id = 1;
+    set_host(2);
+    int curr_host_id = 2;
     add_host(1, "172.31.26.11", "/home/ubuntu/laminar/build/bin");
     add_host(2, "172.31.31.200", "/home/ubuntu/laminar/build/bin");
     laminar_init();
