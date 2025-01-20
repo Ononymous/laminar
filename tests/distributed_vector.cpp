@@ -28,6 +28,7 @@ int main() {
     subscribe(ns, 1, 0, ns, 2);
     laminar_setup();
 
+
     if (curr_host_id == 1){
         uint8_t array[] = {1, 2, 3};
         struct ts_value* operand_value = value_from_unsigned_byte_array(array, 3);
