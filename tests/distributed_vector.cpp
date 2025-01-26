@@ -15,10 +15,10 @@ int main() {
     system("sudo find . -name \"lmr*\" -delete");
     laminar_reset(); /* reset setup data structures */
 
-    set_host(2);
     int curr_host_id = 2;
-    add_host(1, "172.31.26.11", "/home/ubuntu/laminar/build/bin");
-    add_host(2, "172.31.31.200", "/home/ubuntu/laminar/build/bin");
+    set_host(curr_host_id);
+    add_host(1, "169.231.230.190", "/home/ubuntu/laminar/build/bin/");
+    add_host(2, "169.231.230.3", "/home/ubuntu/laminar/build/bin/");
     laminar_init();
 
     const struct df_operation parse = {DF_INTERNAL, DF_INTERNAL_NOOP};
@@ -51,10 +51,16 @@ int main() {
     else{
         operand result;
         get_result(ns, 2, &result, 1);
+        std::cout << "hi1" << std::endl;
         ts_value* loaded_result = load_value(&result.operand_value);
+        std::cout << "hi2" << std::endl;
+        if(loaded_result == NULL){
+            std::cout << "null"<<std::endl;
+        }
 
         uint8_t result_array[3];
         get_unsigned_byte_array(result_array, loaded_result);
+        std::cout << "hi3" << std::endl;
 
         for(int i = 0; i < sizeof(result_array); i++){
             std::cout << (int)result_array[i] << std::endl;

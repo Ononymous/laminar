@@ -13,10 +13,10 @@ int main() {
 
     // Set up single device on localhost
     
-    set_host(2);
     int curr_host_id = 2;
-    add_host(1, "172.31.31.200", "/cspot-device-namespace/");
-    add_host(2, "172.31.26.11", "/cspot-device-namespace/");
+    set_host(curr_host_id);
+    add_host(1, "169.231.230.190", "/home/ubuntu/laminar/build/bin/");
+    add_host(2, "169.231.230.3", "/home/ubuntu/laminar/build/bin/");
     
     // Nodes is on device 1: (namespace, host, node)
 
