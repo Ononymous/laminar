@@ -169,12 +169,17 @@ void* woof_get_array_value(const char* const woof_id, size_t value_size, const s
 }
 
 bool load_array_value(struct ts_value_array* const array) { // NOLINT(misc-no-recursion)
-    char woof_id[100];
-    strcpy(woof_id, TS_STORAGE_PREFIX);
+    char woof_id[200];
+    // STRATEGY 
+    // strcpy(woof_id, array->storage_system.uri);
+    strcpy(woof_id, "woof://169.231.230.190/home/ubuntu/laminar/build/bin/");
+    strcat(woof_id, TS_STORAGE_PREFIX);
     strcat(woof_id, "-array-");
     char uuid_string[UUID_STR_LEN];
     uuid_unparse_lower(array->storage_system.id, uuid_string);
     strcat(woof_id, uuid_string);
+
+    printf("gengen6 %s\n",woof_id);
 
     const unsigned long index = WooFGetLatestSeqno(woof_id);
 

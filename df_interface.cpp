@@ -347,6 +347,16 @@ printf("fire_operand: output_woof: %s, value: %f\n",
 int get_result(const int ns, const int id, operand* const res, const unsigned long itr) {
     std::string woof_name = generate_woof_path(OUT_WF_TYPE, ns, id);
 
+    // size_t pos = woof_name.find_last_of('/');
+    // std::string uri;
+    // if (pos != std::string::npos) {
+    //     uri = woof_name.substr(0, pos + 1);  // Keep up to and including the '/'
+    // } else {
+    //     uri = woof_name;  // No '/' found, keep the original string
+    // }
+
+    // std::cout << "gengen11 " << uri << std::endl;
+
     // wait till output log has atleast itr number of results
     while (woof_last_seq(woof_name) < itr) {}
     //while(WooFGetLatestSeqno(woof_name.c_str()) < itr){}
