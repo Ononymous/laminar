@@ -547,7 +547,7 @@ void matrix_multiplication() {
 
     operand result_op;
     get_result(ns, 1, &result_op, 1);
-    struct ts_value* result_value = load_value(&result_op.operand_value);
+    struct ts_value* result_value = load_value(&result_op.operand_value, NULL);
 
     double result[3][3];
     get_double_matrix(result, result_value);

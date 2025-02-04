@@ -25,7 +25,7 @@ operand perform_operation(const std::vector<operand>& operands,
     struct ts_value* operands_array[operand_count];
     const struct ts_value* const_operands_array[operand_count];
     for (size_t i = 0; i < operand_count; ++i) {
-        operands_array[i] = load_value(&operands[i].operand_value);
+        operands_array[i] = load_value(&operands[i].operand_value, NULL);
         const_operands_array[i] = operands_array[i];
         if (const_operands_array[i] == nullptr) {
             log_error("Could not load value [input:%lu]", i);

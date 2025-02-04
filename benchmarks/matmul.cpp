@@ -259,7 +259,7 @@ double matmul_partition(const int mat_size, int n_partitions, bool timing) {
             if (err < 0) {
                 std::cout << "Failed to read the result " << std::endl;
             }
-            ts_value* const result_value = load_value(&result.operand_value);
+            ts_value* const result_value = load_value(&result.operand_value, NULL);
             int result_matrix[min_chunk_size + !!overflow][mat_size];
                     
             get_integer_matrix(result_matrix, result_value);

@@ -246,7 +246,7 @@ void filter_test_string() {
     std::vector<const char*> expected = {"", "Hello", "", "", "", "World"}; // ignore values for 0, 2, 3, 4
     unsigned long prev_itr = 1;
     for (auto& op : v) {
-        ts_value* const value = load_value(&op.operand_value);
+        ts_value* const value = load_value(&op.operand_value, NULL);
         char* const string = value_to_string(value);
         ASSERT(op.itr >= prev_itr, "Iteration increases monotonically")
         ASSERT(strcmp(string, expected[op.itr]) == 0, "Ensure value is correct for each iteration number")

@@ -59,7 +59,7 @@ void Test2Hosts()
 		std::cout << "Failed to read the result " << std::endl;
 	    }
 	    printf("get_result completed: %d\n",err);
-	    ts_value* loaded_result = load_value(&result.operand_value);
+	    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 	    printf("loaded_result %s\n",loaded_result->value.ts_prim_string);
 	    char *result_str = value_to_prim_string(loaded_result);
 
@@ -153,7 +153,7 @@ void ETL2Hosts() {
 		std::cout << "Failed to read the result " << std::endl;
 	    }
 	    //printf("get_result: err: %d\b",err);
-	    ts_value* loaded_result = load_value(&result.operand_value);
+	    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 	    //printf("loaded_result %s\n",loaded_result->value.ts_prim_string);
 
 	    gettimeofday(&tm,NULL); // get time stamp
@@ -294,7 +294,7 @@ void ETL3Hosts() {
 		    if (err < 0) {
 			std::cout << "Failed to read the result " << std::endl;
 		    }
-		    ts_value* loaded_result = load_value(&result.operand_value);
+		    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
 		    gettimeofday(&tm,NULL); // get time stamp
 		    ts = (double)tm.tv_sec + (double)(tm.tv_usec / 1000000.0); // sec
@@ -362,7 +362,7 @@ void ETL() {
     gettimeofday(&tm,NULL);
     bench_end_time = (double)tm.tv_sec + (double)(tm.tv_usec / 1000000.0);
 
-    ts_value* loaded_result = load_value(&result.operand_value);
+    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
     char* result_str =
         static_cast<char*>(malloc(get_string_length(loaded_result) + 1));
@@ -676,7 +676,7 @@ void test_average() {
         if (err < 0) {
             std::cout << "Failed to read the result " << std::endl;
         }
-        ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
         char* result_str =
             static_cast<char*>(malloc(get_string_length(loaded_result) + 1));
@@ -724,7 +724,7 @@ void test_kalman_filter() {
         if (err < 0) {
             std::cout << "Failed to read the result " << std::endl;
         }
-        ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
         char* result_str =
             static_cast<char*>(malloc(get_string_length(loaded_result) + 1));
@@ -771,7 +771,7 @@ void test_regression() {
         if (err < 0) {
             std::cout << "Failed to read the result " << std::endl;
         }
-        ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
         double* m_and_b =
             static_cast<double*>(malloc(get_array_size(loaded_result)));
@@ -818,7 +818,7 @@ void test_distinct_count() {
         if (err < 0) {
             std::cout << "Failed to read the result " << std::endl;
         }
-        ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
         int count;
         get_integer(&count, loaded_result);

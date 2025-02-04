@@ -31,7 +31,7 @@ void interpolate(std::unordered_map<std::string, double> &current,
                         std::cout << "Failed to read the result " << std::endl;
                     }
 
-                    ts_value *loaded_val = load_value(&op.operand_value);
+                    ts_value *loaded_val = load_value(&op.operand_value, NULL);
                     char *result_str = static_cast<char *>(
                         malloc(get_string_length(loaded_val) + 1));
                     get_string(result_str, loaded_val);

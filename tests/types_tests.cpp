@@ -62,7 +62,7 @@ void primitive_types_laminar() {
 
     operand result;
     woof_get(generate_woof_path(OUT_WF_TYPE, LAMINAR_NAMESPACE, 1), &result, 1);
-    load_value(&result.operand_value);
+    load_value(&result.operand_value, NULL);
 
     const double result_double = value_to_double(&result.operand_value);
 
@@ -97,7 +97,7 @@ void array_type_laminar() {
 
     operand result;
     woof_get(generate_woof_path(OUT_WF_TYPE, LAMINAR_NAMESPACE, 1), &result, 1);
-    load_value(&result.operand_value);
+    load_value(&result.operand_value, NULL);
 
     double result_array[3];
     get_double_array(result_array, &result.operand_value);
@@ -134,7 +134,7 @@ void array_type_with_op_laminar() {
 
     operand result;
     get_result(LAMINAR_NAMESPACE, 1, &result, 1);
-    ts_value* loaded_result = load_value(&result.operand_value);
+    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
     uint8_t result_array[3];
     get_unsigned_byte_array(result_array, loaded_result);
@@ -169,7 +169,7 @@ void string_type_laminar() {
 
     operand result;
     get_result(LAMINAR_NAMESPACE, 1, &result, 1);
-    ts_value* loaded_result = load_value(&result.operand_value);
+    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
     char* string_result = static_cast<char*>(malloc(get_string_length(loaded_result) + 1));
     get_string(string_result, loaded_result);
@@ -353,7 +353,7 @@ void string_type_with_op_laminar() {
 
     operand result;
     get_result(LAMINAR_NAMESPACE, 1, &result, 1);
-    ts_value* loaded_result = load_value(&result.operand_value);
+    ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
     char* result_string = value_to_string(loaded_result);
 
@@ -386,7 +386,7 @@ void matrix_types_laminar() {
 
     operand result;
     woof_get(generate_woof_path(OUT_WF_TYPE, LAMINAR_NAMESPACE, 1), &result, 1);
-    ts_value* const result_value = load_value(&result.operand_value);
+    ts_value* const result_value = load_value(&result.operand_value, NULL);
 
     int32_t result_matrix[3][3];
     get_integer_matrix(result_matrix, result_value);

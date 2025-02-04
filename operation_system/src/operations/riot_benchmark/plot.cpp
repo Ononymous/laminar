@@ -77,7 +77,7 @@ void generate_multiline_plot(std::unordered_map<std::string, double> &curr_tuple
     struct ts_value *old_obs_value;
     for (int i = 0; i < PLOT_ACCUMULATE_SIZE - 1; ++i) {
         woof_get(woof_prev_obs, &old_obs_op, end_seq - i);
-        old_obs_value = load_value(&old_obs_op.operand_value);
+        old_obs_value = load_value(&old_obs_op.operand_value, NULL);
         const char *old_obs_str = value_to_prim_string(old_obs_value);
         std::unordered_map<std::string, double> old_obs =
             deserialize(std::string_view(old_obs_str));

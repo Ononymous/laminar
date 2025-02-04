@@ -72,7 +72,7 @@ void word_count() {
     while (cont) {
         operand result;
         get_result(laminar_namespace, 3, &result, i++);
-        ts_value* const result_value = load_value(&result.operand_value);
+        ts_value* const result_value = load_value(&result.operand_value, NULL);
 
         char* const result_string = value_to_string(result_value);
         if (strcmp(result_string, "CSPOTEND") == 0) {

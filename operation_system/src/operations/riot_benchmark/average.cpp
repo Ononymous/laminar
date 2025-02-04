@@ -40,7 +40,7 @@ auto average(std::unordered_map<std::string, double> &input,
     struct operand prev_avg_op;
     const unsigned long latest_value_sequence_number = woof_last_seq(woof_prev_avgs);
     woof_get(woof_prev_avgs, &prev_avg_op, latest_value_sequence_number);
-    struct ts_value *prev_avg_value = load_value(&prev_avg_op.operand_value);
+    struct ts_value *prev_avg_value = load_value(&prev_avg_op.operand_value, NULL);
     const char *prev_avg_str;
     if (prim)
         prev_avg_str = value_to_prim_string(prev_avg_value);
@@ -69,7 +69,7 @@ auto average(std::unordered_map<std::string, double> &input,
     struct operand oldest_input_op;
     woof_get(woof_prev_inputs, &oldest_input_op,
              num_prev_inputs - WINDOW_SIZE + 1);
-    struct ts_value *oldest_input_value = load_value(&oldest_input_op.operand_value);
+    struct ts_value *oldest_input_value = load_value(&oldest_input_op.operand_value, NULL);
     const char *oldest_input_str;
     if (prim)
         oldest_input_str = value_to_prim_string(oldest_input_value);

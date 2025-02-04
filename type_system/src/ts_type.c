@@ -51,12 +51,9 @@ unsigned long byte_array_to_unsigned_long(const uint8_t* const array) {
 }
 
 
-// bool load_string_value(struct ts_value_string* string);
-// bool load_array_value(struct ts_value_array* array);
 bool load_string_value(struct ts_value_string* string, const char* uri);
 bool load_array_value(struct ts_value_array* array, const char* uri);
 
-// struct ts_value* load_value(const struct ts_value* const unloaded_value) {
 struct ts_value* load_value(const struct ts_value* const unloaded_value, const char* uri){
     struct ts_value* return_value = malloc(sizeof(struct ts_value));
 
@@ -109,7 +106,6 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value, const c
 #ifndef ESP8266
         case TS_STRING: {
             return_value->value.ts_string = unloaded_value->value.ts_string;
-            // if (!load_string_value(&return_value->value.ts_string)) {
             if (!load_string_value(&return_value->value.ts_string, uri)){
                 free(return_value);
                 return NULL;
@@ -117,7 +113,6 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value, const c
         } break;
         case TS_ARRAY: {
             return_value->value.ts_array = unloaded_value->value.ts_array;
-            // if (!load_array_value(&return_value->value.ts_array)) {
             if (!load_array_value(&return_value->value.ts_array, uri)){
                 free(return_value);
                 return NULL;
@@ -133,9 +128,6 @@ struct ts_value* load_value(const struct ts_value* const unloaded_value, const c
 }
 
 #ifndef ESP8266
-// bool load_string_value(struct ts_value_string* const string) {
-//     char woof_id[100];
-//     strcpy(woof_id, TS_STORAGE_PREFIX);
 bool load_string_value(struct ts_value_string* const string, const char* uri){
     char woof_id[200];
 
@@ -183,12 +175,6 @@ void* woof_get_array_value(const char* const woof_id, size_t value_size, const s
     return array_value;
 }
 
-// bool load_array_value(struct ts_value_array* const array) { // NOLINT(misc-no-recursion)
-//     char woof_id[200];
-//     // STRATEGY 
-//     // strcpy(woof_id, array->storage_system.uri);
-//     strcpy(woof_id, "woof://169.231.230.190/home/ubuntu/laminar/build/bin/");
-//     strcat(woof_id, TS_STORAGE_PREFIX);
 bool load_array_value(struct ts_value_array* const array, const char* uri){
     char woof_id[200];
 
@@ -253,7 +239,6 @@ bool load_array_value(struct ts_value_array* const array, const char* uri){
             if (array->value != NULL) {
                 for (size_t i = 0; i < array->size; i++) {
                     struct ts_value_string* const array_element = (struct ts_value_string*)array->value;
-                    // const bool is_element_loaded = load_string_value(&array_element[i]);
                     const bool is_element_loaded = load_string_value(&array_element[i], uri);
                     if (!is_element_loaded) {
                         // delete all previous allocated elements
@@ -270,7 +255,6 @@ bool load_array_value(struct ts_value_array* const array, const char* uri){
             if (array->value != NULL) {
                 for (size_t i = 0; i < array->size; i++) {
                     struct ts_value_array* const array_element = (struct ts_value_array*)array->value;
-                    // const bool is_element_loaded = load_array_value(&array_element[i]);
                     const bool is_element_loaded = load_array_value(&array_element[i], uri);
                     if (!is_element_loaded) {
                         // delete all previous allocated elements

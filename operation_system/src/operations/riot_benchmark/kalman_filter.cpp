@@ -96,14 +96,14 @@ int kalman_filter_node(const struct ts_value *const *operands,
         // Load p0s from woof
         struct ts_value p0s_value;
         woof_get(p0s_woof, &p0s_value, 0);
-        ts_value* p0s_loaded_val = load_value(&p0s_value);
+        ts_value* p0s_loaded_val = load_value(&p0s_value, NULL);
         const char *p0s_str = value_to_string(p0s_loaded_val);
         p0s = deserialize(std::string_view(p0s_str));
 
         // Load x0s from woof
         struct ts_value x0s_value;
         woof_get(x0s_woof, &x0s_value, 0);
-        ts_value* x0s_loaded_val = load_value(&x0s_value);
+        ts_value* x0s_loaded_val = load_value(&x0s_value, NULL);
         const char *x0s_str = value_to_string(x0s_loaded_val);
         x0s = deserialize(std::string_view(x0s_str));
     }
@@ -171,14 +171,14 @@ int kalman_filter_node_prim(const struct ts_value *const *operands,
         // Load p0s from woof
         struct ts_value p0s_value;
         woof_get(p0s_woof, &p0s_value, 0);
-        ts_value* p0s_loaded_val = load_value(&p0s_value);
+        ts_value* p0s_loaded_val = load_value(&p0s_value, NULL);
         const char *p0s_str = value_to_string(p0s_loaded_val);
         p0s = deserialize(std::string_view(p0s_str));
 
         // Load x0s from woof
         struct ts_value x0s_value;
         woof_get(x0s_woof, &x0s_value, 0);
-        ts_value* x0s_loaded_val = load_value(&x0s_value);
+        ts_value* x0s_loaded_val = load_value(&x0s_value, NULL);
         const char *x0s_str = value_to_string(x0s_loaded_val);
         x0s = deserialize(std::string_view(x0s_str));
     }

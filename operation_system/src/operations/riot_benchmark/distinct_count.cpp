@@ -96,7 +96,7 @@ int distinct_count_node_internal(struct df_operation_metadata* const metadata, c
     // Load max_zeros from woof
     struct ts_value max_zeros_value {};
     woof_get(max_zeros_woof, &max_zeros_value, woof_last_seq(max_zeros_woof));
-    ts_value* max_zeros_loaded_val = load_value(&max_zeros_value);
+    ts_value* max_zeros_loaded_val = load_value(&max_zeros_value, NULL);
     max_zeros = value_to_integer_array(max_zeros_loaded_val);
 
     int count = unique_count(input);

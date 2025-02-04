@@ -22,7 +22,7 @@ std::pair<double, double> simple_regression(int itemCount, double value, struct 
     struct ts_value *old_input_value;
     for (int i = 0; i < WINDOW_SIZE - 1; ++i) {
         woof_get(woof_prev_inputs, &old_input_op, end_seq - i);
-        old_input_value = load_value(&old_input_op.operand_value);
+        old_input_value = load_value(&old_input_op.operand_value, NULL);
         const char *old_input_str = value_to_prim_string(old_input_value);
         std::unordered_map<std::string, double> old_input =
             deserialize(std::string_view(old_input_str));
