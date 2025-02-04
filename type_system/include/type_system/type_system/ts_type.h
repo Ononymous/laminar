@@ -15,7 +15,8 @@ extern "C" {
  * @param unloaded_value The unloaded value with NULL references.
  * @return The loaded value or NULL if something went wrong.
  */
-struct ts_value* load_value(const struct ts_value* unloaded_value);
+struct ts_value* load_value(const struct ts_value* unloaded_value, const char* uri);
+// struct ts_value* load_value(const struct ts_value* unloaded_value);
 
 /**
  * Function to store value. Note the type system will modify information inside the storage system of the value.

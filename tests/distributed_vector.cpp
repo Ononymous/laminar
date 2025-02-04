@@ -40,6 +40,7 @@ int main() {
         operand result;
         get_result(ns, 2, &result, 1);
         ts_value* loaded_result = load_value(&result.operand_value);
+        // ts_value* loaded_result = load_value(&result.operand_value, NULL);
 
         uint8_t result_array[3];
         get_unsigned_byte_array(result_array, loaded_result);
@@ -52,7 +53,10 @@ int main() {
         operand result;
         get_result(ns, 2, &result, 1);
         std::cout << "hi1" << std::endl;
-        ts_value* loaded_result = load_value(&result.operand_value);
+        std::string tempStr(c_generate_woof_uri(ns, 1));
+        std::cout << "gengen " << tempStr << std::endl;
+        // ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, c_generate_woof_uri(ns, 1));
         std::cout << "hi2" << std::endl;
         if(loaded_result == NULL){
             std::cout << "null"<<std::endl;

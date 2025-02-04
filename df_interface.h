@@ -45,4 +45,6 @@ std::string generate_woof_host_url(int host_id);
 
 std::string graphviz_representation();
 
+const char* c_generate_woof_uri(int ns, int id);
+
 #endif // DF_INTERFACE_H

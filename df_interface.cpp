@@ -89,6 +89,29 @@ void retry_sleep(enum RetryType retry_type, int retry_itr) {
     }
 }
 
+const char* c_generate_woof_uri(int ns, int id){
+    std::string woof_name = generate_woof_path(OUT_WF_TYPE, ns, id);
+
+    size_t pos = woof_name.find_last_of('/');
+    std::string uri;
+    if (pos != std::string::npos) {
+        uri = woof_name.substr(0, pos + 1);  // Keep up to and including the '/'
+    } else {
+        uri = woof_name;  // No '/' found, keep the original string
+    }
+
+    // Allocate memory for the string plus the null terminator
+    char* cstr_uri = (char*)malloc(uri.length() + 1);
+    if (cstr_uri == NULL) {
+        return NULL;  // Handle malloc failure
+    }
+
+    // Copy the string content safely
+    strcpy(cstr_uri, uri.c_str());
+
+    return cstr_uri;
+}
+
 std::string generate_woof_path(
     const DFWoofType woof_type, const int ns, const int node_id, int host_id, const int port_id) {
     std::string host_url;
@@ -354,8 +377,6 @@ int get_result(const int ns, const int id, operand* const res, const unsigned lo
     // } else {
     //     uri = woof_name;  // No '/' found, keep the original string
     // }
-
-    // std::cout << "gengen11 " << uri << std::endl;
 
     // wait till output log has atleast itr number of results
     while (woof_last_seq(woof_name) < itr) {}
