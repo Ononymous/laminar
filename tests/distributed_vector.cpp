@@ -15,10 +15,10 @@ int main() {
     system("sudo find . -name \"lmr*\" -delete");
     laminar_reset(); /* reset setup data structures */
 
-    set_host(1);
     int curr_host_id = 1;
-    add_host(1, "172.31.26.11", "/home/ubuntu/laminar/build/bin");
-    add_host(2, "172.31.31.200", "/home/ubuntu/laminar/build/bin");
+    set_host(curr_host_id);
+    add_host(1, "169.231.230.190", "/home/ubuntu/laminar/build/bin/");
+    add_host(2, "169.231.230.3", "/home/ubuntu/laminar/build/bin/");
     laminar_init();
 
     const struct df_operation parse = {DF_INTERNAL, DF_INTERNAL_NOOP};
@@ -27,7 +27,6 @@ int main() {
 
     subscribe(ns, 1, 0, ns, 2);
     laminar_setup();
-
 
     if (curr_host_id == 1){
         uint8_t array[] = {1, 2, 3};
@@ -39,7 +38,7 @@ int main() {
 
 
         operand result;
-        get_result(ns, 2, &result, 1);
+        get_result(ns, 1, &result, 1);
         ts_value* loaded_result = load_value(&result.operand_value);
 
         uint8_t result_array[3];
@@ -51,7 +50,7 @@ int main() {
     }
     else{
         operand result;
-        get_result(ns, 2, &result, 1);
+        get_result(ns, 1, &result, 1);
         ts_value* loaded_result = load_value(&result.operand_value);
 
         uint8_t result_array[3];
