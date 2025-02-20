@@ -51,7 +51,7 @@ int main() {
     else{
         operand result;
         get_result(ns, 1, &result, 1);
-        ts_value* loaded_result = load_value(&result.operand_value);
+        ts_value* loaded_result = load_value(&result.operand_value, ns, 1);
 
         uint8_t result_array[3];
         get_unsigned_byte_array(result_array, loaded_result);
