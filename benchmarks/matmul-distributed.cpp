@@ -15,22 +15,22 @@
 #include "type_system/types/ts_primitive.h"
 #include "type_system/types/ts_string.h"
 
-int a[8192][8192];
-int b[8192][8192];
+// int a[8192][8192];
+// int b[8192][8192];
 
-// int a[4][4] = {
-//     {2, 2, 3, 4},
-//     {4, 3, 2, 1},
-//     {2, 4, 1, 3},
-//     {3, 1, 4, 2}
-// };
+int a[4][4] = {
+    {2, 2, 3, 4},
+    {4, 3, 2, 1},
+    {2, 4, 1, 3},
+    {3, 1, 4, 2}
+};
 
-// int b[4][4] = {
-//     {2, 2, 3, 4},
-//     {4, 3, 2, 1},
-//     {2, 4, 1, 3},
-//     {3, 1, 4, 2}
-// };
+int b[4][4] = {
+    {2, 2, 3, 4},
+    {4, 3, 2, 1},
+    {2, 4, 1, 3},
+    {3, 1, 4, 2}
+};
 
 bool TIMING = false;
 
@@ -84,7 +84,6 @@ double matmul_partition(const int mat_size, int n_partitions, int t_partitions, 
     }
 
     // usleep(5e5);
-    sleep(1);
 
     if (!TIMING) {
         // Show matrix multiplication result
@@ -155,8 +154,8 @@ int main(int argc, char **argv) {
     laminar_reset(); /* reset setup data structures */
 
     set_host(curr_host_id);
-    add_host(1, "169.231.230.190", "/home/ubuntu/laminar/build/bin/");
-    add_host(2, "169.231.230.3", "/home/ubuntu/laminar/build/bin/");
+    add_host(1, "169.231.230.190", "/disk2/cspot-namespace-platform/");
+    add_host(2, "169.231.230.3", "/disk2/cspot-namespace-platform/");
     laminar_init();
     
     // Matrix set up
